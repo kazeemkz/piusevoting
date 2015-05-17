@@ -1,0 +1,192 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head >
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title Pius Voting System</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width" />
+
+    @Styles.Render("~/Content/css")
+    <link href="~/Content/timeTo.css" rel="stylesheet" />
+    @Scripts.Render("~/bundles/modernizr")
+    @* <script src="~/Scripts/jquery-1.9.1.min.js"></script>*@
+   @* <script src="~/Scripts/jquery.timeTo.js"></script>*@
+    <link href="~/Content/bootstrap-responsive.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    @*  @Html.Hidden("theKey")*@
+    <style>
+        fieldset {
+            border: 1px solid #000;
+            padding: 0 1.4em 1.4em 1.4em;
+            margin: 0 0 1.5em 0;
+        }
+
+        legend {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        fieldset legend {
+            display: inline;
+        }
+
+        hr {
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="content-wrapper">
+            <div class="float-left">
+                @*<img src="~/Images/voting.png" />*@
+
+                @*<h3>Voting Time Left :<span id="days"></span>
+                <span id="hours"></span>
+                <span id="minutes"></span>
+                <span id="seconds"></span></h3>*@
+                @* <p class="site-title">@Html.ActionLink("Virtual e-Voting System", "Index", "Home")</p>*@
+            </div>
+            <div class="float-right">
+                <section id="login">
+                    @Html.Partial("_LoginPartial")
+                </section>
+                <nav>
+                    <ul id="menu">
+                        @if (User.Identity.IsAuthenticated && !(User.IsInRole("Admin")))
+                        {
+                               
+                            @*<li>@Html.ActionLink("Instructions", "Index", "Home")</li>*@
+                            
+                            if (!(User.IsInRole("InterAdmin")))
+                            {
+                                <li>
+                                    @using (Html.BeginForm("Vote", "Post", new { id = "vote" }, FormMethod.Get))
+                                    {
+                                        <input type="submit" value="Vote Now" class="btn-warning" />
+                                     }
+                                </li>
+                            @*<li>@Html.ActionLink("Vote!", "Vote", "Post",null, new{id="vote"})</li>*@
+                           
+                            }
+                            if (User.IsInRole("SuperAdmin"))
+                            {
+                                 @*<li>@Html.ActionLink("Populate", "Populate", "Voter")</li>*@
+                            <li>@Html.ActionLink("Student Record", "Index", "Voter")</li>
+                            @*<li>@Html.ActionLink("Voters Record", "Index2", "Voter")</li>*@
+                            <li>@Html.ActionLink("Password Recovery", "GivePassword", "Post")</li>
+                            @*<li>@Html.ActionLink("Post", "Index", "Post")</li>*@
+                            <li>@Html.ActionLink("Candidate", "Index", "Participant")</li>
+                            <li>@Html.ActionLink("Result", "Result", "Post")</li>
+                            }
+
+                        }
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                        {
+                            <li>@Html.ActionLink("Password", "GivePassword", "Post")</li>  
+                            
+                        }
+
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("InterAdmin"))
+                        {
+                            <li>@Html.ActionLink("Voters Record", "Index2", "Voter")</li>
+                            <li>@Html.ActionLink("Result", "Result", "Post")</li> 
+                            
+                        }
+                             
+@*   <li>@Html.ActionLink("Reset", "Reset", "Post")</li>*@
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <div id="body" style="background-color:chocolate">
+        @RenderSection("featured", required: false)
+        <section class="content-wrapper main-content clear-fix">
+            @RenderBody()
+        </section>
+    </div>
+    <footer>
+        <div class="content-wrapper">
+            <div class="float-left">
+                @*<h3>&copy; @DateTime.Now.Year - Virtual<em>Kalone</em> and IceWorks</h3>*@
+            </div>
+        </div>
+    </footer>
+
+    @Scripts.Render("~/bundles/jquery")
+    @RenderSection("scripts", required: false)
+
+
+
+    @*<link href="~/Content/timeTo.css" rel="stylesheet" />*@
+
+    @* <script src="~/Scripts/jquery-1.9.1.min.js"></script>
+    <script src="~/Scripts/jquery.timeTo.js"></script>*@
+
+    @*<script src="~/Scripts/jquery.timeTo.js"></script>
+    <a href="~/Scripts/timeTo.jquery.json">~/Scripts/timeTo.jquery.json</a>*@
+    <script type="text/javascript">
+        $(document).ready(function () {
+           // alert("HI");
+            setInterval(function () {
+                var future = new Date("Jan 21 2015 15:00:00 GMT+0100");
+                var votingStartTime = new Date("Dec 15 2014 08:00:00 GMT+0100");
+                var now = new Date();
+                var difference = Math.floor((future.getTime() - now.getTime()) / 1000);
+
+                var differenceVotingTime = Math.floor((votingStartTime.getTime() - now.getTime()) / 1000);
+              //  $('#theKey').val(difference);
+               // alert($('#theKey').val());
+                if (difference <= 0) {
+                  //  $('#theKey').val(difference);
+                   // alert($('#theKey').val());
+                    $('#vote').click(function () {
+                     // alert('You clicked the link.');
+                        return false;
+                        
+                    });
+
+                }
+
+                if (differenceVotingTime >= 0) {
+                    //  $('#theKey').val(difference);
+                    // alert($('#theKey').val());
+                    $('#vote').click(function () {
+                        // alert('You clicked the link.');
+                        return false;
+
+                    });
+
+                }
+              // alert(difference);
+
+                var seconds = fixIntegers(difference % 60);
+                difference = Math.floor(difference / 60);
+
+                var minutes = fixIntegers(difference % 60);
+                difference = Math.floor(difference / 60);
+
+                var hours = fixIntegers(difference % 24);
+                difference = Math.floor(difference / 24);
+
+                var days = difference;
+
+                $("#seconds").text(seconds + "s");
+                $("#minutes").text(minutes + "m");
+                $("#hours").text(hours + "hrs,");
+                $("#days").text(days + "days,");
+            }, 1000);
+
+            function fixIntegers(integer) {
+                if (integer < 0)
+                    integer = 0;
+                if (integer < 10)
+                    return "0" + integer;
+                return "" + integer;
+            }
+        });
+    </script>
+</body>
+</html>
+

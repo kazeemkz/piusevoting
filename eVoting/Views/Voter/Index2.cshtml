@@ -1,0 +1,203 @@
+﻿@model PagedList.IPagedList<Model.Voter>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h4>VIEW VOTERS</h4>
+
+<fieldset>
+
+    <legend>Search Box</legend>
+
+    @using (Html.BeginForm("Index2", "Voter"))
+    {
+        <table>
+            <tr>
+                <td>Name:</td>
+
+                <td>@Html.TextBox("FirstName") </td>
+
+            </tr>
+            <tr>
+                <td>Department:</td>
+                <td>@Html.TextBox("dept") </td>
+
+            </tr>
+            <tr>
+                <td>Identification:</td>
+                <td>@Html.TextBox("ID")</td>
+
+
+            </tr>
+
+            <tr>
+                <td>Voted?:</td>
+                <td>@Html.DropDownList("Voted", new SelectList((System.Collections.IEnumerable)ViewBag.Item, "Value", "Text"))</td>
+
+            </tr>
+
+        </table>
+        
+        <input type="submit" value="Search" id="button" />
+    }
+</fieldset>
+
+@*<p>
+    @Html.ActionLink("Create New", "Create")
+</p>*@
+<fieldset>
+    <legend><b>@ViewBag.Count Legible Voter(s) Found</b></legend>
+    <table class="table table-striped table-bordered
+table-condensed table-hover">
+        <tr>
+            <th>
+                <b>User Name</b>
+            </th>
+            <th>
+                <b>Matric</b>
+            </th>
+            <th></th>
+            <th></th>
+            <th>
+                <b>Names</b>
+            </th>
+            <th></th>
+            <th></th>
+            <th>
+                <b>Dept.</b>
+            </th>
+            <th></th>
+            <th></th>
+            <th>
+                <b>Time Voted</b>
+            </th>
+            <th></th>
+            <th></th>
+            <th>
+                <b>Voted?</b>
+            </th>
+            <th></th>
+            <th></th>
+            <th>
+                <b>Log-In Trails After Voting</b>
+            </th>
+            <th></th>
+            <th></th>
+
+            @* <th>
+                    @Html.DisplayNameFor(model => model.Voted)
+                </th>*@
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdentityNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Matric)
+                </td>
+                <td></td>
+                <td></td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td></td>
+                <td></td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Department)
+                </td>
+                <td></td>
+                <td></td>
+                <td>
+                    @if (item.Voted == false)
+                    {
+                        <text>Never Voted</text>
+                    }
+                    else
+                    {
+                        string theDate = string.Format("{0: dd-MMMM-yyyy hh:mm:ss tt}", item.VotedTime);
+                        <text>@theDate</text>
+
+                    }
+
+                </td>
+                <td></td>
+                <td></td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Voted)
+                </td>
+                <td></td>
+                <td></td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LoggedInAttemptsAfterVoting)
+                </td>
+                <td></td>
+                <td></td>
+                @*  <td>
+                        @Html.DisplayFor(modelItem => item.Voted)
+                    </td>*@
+                <td>
+                    @* @Html.ActionLink("Edit", "Edit", new { id = item.VoterID }) |
+
+                        @Html.ActionLink("Delete", "Delete", new { id = item.VoterID })*@
+                </td>
+            </tr>
+        }
+
+    </table>
+
+</fieldset>
+<table>
+    <tr>
+        <td>Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)
+            of @Model.PageCount
+            &nbsp;
+        </td>
+        @if (Model.HasPreviousPage)
+        {
+            <td>
+                @Html.ActionLink("<<", "Index", new { page = 1, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter })
+            </td>
+            @Html.Raw("&nbsp;")
+            <td>
+                @Html.ActionLink("< Prev", "Index", new { page = Model.PageNumber - 1, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter })
+            </td>
+        }
+        else
+        {
+            <td><<
+            </td>
+            <td>
+                @Html.Raw("&nbsp;")
+                < Prev
+            </td>
+        }
+        &nbsp;
+    @if (Model.HasNextPage)
+    {
+        <td>
+            @Html.ActionLink("Next >", "Index", new { page = Model.PageNumber + 1, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter })
+        </td>
+        <td>
+            @Html.Raw("&nbsp;")
+        </td>
+        <td>
+            @Html.ActionLink(">>", "Index", new { page = Model.PageCount, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter })
+        </td>
+    }
+    else
+    {
+        <td>Next >
+        </td>
+        <td>
+            @Html.Raw("&nbsp;")
+        </td>
+        <td>>>
+        </td>
+    }
+    </tr>
+</table>

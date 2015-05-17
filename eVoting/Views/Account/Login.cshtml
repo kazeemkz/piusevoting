@@ -1,0 +1,114 @@
+﻿@model eVoting.Models.LoginModel
+
+@{
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+}
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/bootstrap-responsive.min.css" rel="stylesheet" />
+<hgroup class="title">
+    <h1>@ViewBag.Title</h1>
+</hgroup>
+
+@if (ViewData["Success"] =="1")
+{
+    <div id="successMessage">
+        <h2>CONGRATULATIONS!!!</h2>
+        <br />
+        <h2>THANK YOU FOR VOTING!</h2>
+    </div>
+}
+
+@if (ViewData["Success"] == "2")
+{
+    <div id="successMessage1">
+        <h2>!!!!!!!SORRY!!!!!!!</h2>
+        <br />
+        <h2> VOTING TIME IS OVER AND</h2>
+          <h2>YOUR VOTE HAS NOT BEEN COUNTED!</h2>
+    </div>
+}
+<section id="loginForm" style="background-color:bisque">
+    @*<h4>Enter your User Name and Password to Log-in </h4>*@
+    @using (Html.BeginForm(new { ReturnUrl = ViewBag.ReturnUrl }))
+    {
+        @*  @Html.AntiForgeryToken() *@
+        @Html.ValidationSummary(true)
+
+        <fieldset>
+            <legend>Voting System- Login</legend>
+            <ol>
+                <li>
+                    @* @Html.LabelFor(m => m.UserName)*@
+                    <b>  @Html.Label("User Identity")</b>
+                    @Html.TextBoxFor(m => m.UserName)
+                    @Html.ValidationMessageFor(m => m.UserName)
+                </li>
+                <li>
+                    <b>  @Html.LabelFor(m => m.Password)</b>
+                    @Html.PasswordFor(m => m.Password)
+                    @Html.ValidationMessageFor(m => m.Password)
+                </li>
+                <li>
+                    @*   @Html.CheckBoxFor(m => m.RememberMe)
+                        @Html.LabelFor(m => m.RememberMe, new { @class = "checkbox" })*@
+                </li>
+            </ol>
+            <input class="btn-warning" type="submit" value="Log in" />
+
+        </fieldset>
+        @*<p>
+                @Html.ActionLink("Register", "Register") if you don't have an account.
+            </p>*@
+    }
+</section>
+
+
+
+
+@section Scripts {
+    <script src="~/Scripts/jquery-1.7.1.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.8.20.min.js"></script>
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function () {
+
+
+            $("#successMessage").dialog({
+                show: { effect: 'bounce', duration: 350, /* SPECIF ARGUMENT */ times: 10 },
+                modal: true,
+                height: 300,
+                width: 300,
+                closeOnEscape: false,
+
+            }).css("background-color", "grey").css("foreground-color", "grey"); // border: 1px solid #787878;
+
+            $("#successMessage1").dialog({
+                show: { effect: 'bounce', duration: 350, /* SPECIF ARGUMENT */ times: 10 },
+                modal: true,
+                height: 300,
+                width: 300,
+                closeOnEscape: false,
+
+            }).css("background-color", "grey").css("foreground-color", "grey"); // border: 1px solid #787878;
+
+            AutoCloseDialogBox(5000);
+
+            function AutoCloseDialogBox(sec) {
+
+                setTimeout(function () { $("#successMessage").dialog("close"); }, sec);
+
+            };
+
+            function AutoCloseDialogBox(sec) {
+
+                setTimeout(function () { $("#successMessage1").dialog("close"); }, sec);
+
+            };
+
+        });
+
+
+
+
+    </script>
+}

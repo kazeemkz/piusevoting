@@ -1,0 +1,76 @@
+﻿@model Model.Voter
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h4>CREATE STUDENT VOTING ACCOUNT</h4>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Voter</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.IdentityNumber)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.IdentityNumber)
+            @Html.ValidationMessageFor(model => model.IdentityNumber)
+        </div>
+
+        <div class="editor-label">
+            <b>Names:</b>
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.FirstName)
+            @Html.ValidationMessageFor(model => model.FirstName)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Department)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Department)
+            @Html.ValidationMessageFor(model => model.Department)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Password)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Password)
+            @Html.ValidationMessageFor(model => model.Password)
+        </div>
+
+       @* <div class="editor-label">
+            @Html.LabelFor(model => model.VotedTime)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.VotedTime)
+            @Html.ValidationMessageFor(model => model.VotedTime)
+        </div>*@
+
+     @*   <div class="editor-label">
+            @Html.LabelFor(model => model.Voted)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Voted)
+            @Html.ValidationMessageFor(model => model.Voted)
+        </div>*@
+
+        <p>
+            <input type="submit" value="Create" class="btn-success" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

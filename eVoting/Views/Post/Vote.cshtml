@@ -1,0 +1,149 @@
+﻿
+@model IEnumerable<Model.Post>
+
+@{
+    ViewBag.Title = "Vote";
+    eVoting.DAL.UnitOfWork work = new eVoting.DAL.UnitOfWork();
+}
+
+<h2>VOTE!</h2>
+<br />
+
+@using (Html.BeginForm("Voted", "Post"))
+{
+    @Html.ValidationSummary(true)
+    @Html.Hidden("theKey")
+
+@*<fieldset>
+        <legend>Post</legend>*@
+  
+
+    foreach (var post in Model)
+    {
+        List<Model.Participant> theParticipants = work.ParticipantRepository.Get(a => a.PostID == post.PostID).ToList();
+    <fieldset>
+        <legend>Position -<b>@post.PostName</b></legend>
+        @if (theParticipants.Count > 1)
+        {
+            foreach (var man in theParticipants)
+            {
+
+            <div>
+                <img src="@Url.Action("GetImage", "Participant", new { id = man.ParticipantID })"  width="80" height="80" />
+                @* <input type="radio" name="@Html.Raw(man.Post.PostName)" value="@Html.Raw(man.ParticipantID)"/><b>@Html.Raw(man.LastName + "  ")@Html.Raw(man.FirstName + "  ")@Html.Raw(man.MiddleName + "  ")</b>*@
+                <input type="radio" name="@Html.Raw(post.PostName)" value="@Html.Raw(man.ParticipantID)"/><b>@Html.Raw(man.LastName + "  ")@Html.Raw(man.FirstName + "  ")@Html.Raw(man.MiddleName + "  ")</b>
+                <hr />
+            </div>
+            }
+
+        }
+        @if (theParticipants.Count == 1)
+        {
+        
+        <div>
+            <img src="@Url.Action("GetImage", "Participant", new { id = theParticipants[0].ParticipantID })"  width="80" height="80" />
+            <br />
+           <b> @Html.Raw(theParticipants[0].LastName + "  ")@Html.Raw(theParticipants[0].FirstName + "  ")@Html.Raw(theParticipants[0].MiddleName + "  ")</b>
+            <br />
+            <b>Vote YES or NO for Candidate</b>
+            <br />
+              <br />
+            @* <input type="radio" name="@Html.Raw(man.Post.PostName)" value="@Html.Raw(man.ParticipantID)"/><b>@Html.Raw(man.LastName + "  ")@Html.Raw(man.FirstName + "  ")@Html.Raw(man.MiddleName + "  ")</b>*@
+            <input type="radio" name="@Html.Raw(post.PostName)" value="@Html.Raw(theParticipants[0].ParticipantID + ":" + "YES")"/><b>YES</b>
+            
+             <br />
+             <br />
+            <input type="radio" name="@Html.Raw(post.PostName)" value="@Html.Raw(theParticipants[0].ParticipantID + ":" + "NO")"/><b>NO</b>
+            <hr />
+        </div>
+        }
+
+        @*man.CandidateId*@
+
+
+
+
+    </fieldset>
+    <br />
+    <br />
+    <br />
+    <br>
+    }
+
+@* <div class="editor-label">
+            @Html.LabelFor(model => model.PostName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.PostName)
+            @Html.ValidationMessageFor(model => model.PostName)
+        </div>*@
+
+    <p>
+        <input class="btn btn-danger" type="submit" value="Submit Vote"  />
+    </p>@*
+    </fieldset>*@
+}
+
+
+
+@*<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>*@
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+
+        document.onkeydown = cancelArrowKeys;
+
+        function cancelArrowKeys(e) {
+            try {
+                var e = window.event || e
+
+
+
+
+                var key = e.charCode ? e.charCode : e.keyCode ? e.keyCode : 0;
+
+                event.returnValue = false;
+
+
+                //if (key == 37 || key == 38 || key == 39 || key == 40 || key == 13) {
+                //    if (key == 13)
+                //        document.getElementById('<%=btnFightPokemon.ClientID%>').click();
+                //    if (key == 37)
+                //        document.getElementById('<%=ImgBtnWest.ClientID%>').click();
+                //    if (key == 38)
+                //        document.getElementById('<%=ImgBtnNorth.ClientID%>').click();
+                //    if (key == 39)
+                //        document.getElementById('<%=ImgBtnEast.ClientID%>').click();
+                //    if (key == 40)
+                //        document.getElementById('<%=ImgBtnSouth.ClientID%>').click();
+
+
+
+                //}
+            }
+            catch (Exception) {
+                return false;
+            }
+
+           
+        }
+        var future = new Date("Jan 21 2015 15:00:00 GMT+0100");
+        //var future = new Date("Dec 13 2013 17:00:00 GMT+0100");
+        var now = new Date();
+        var difference = Math.floor((future.getTime() - now.getTime()) / 1000);
+        $('#theKey').val(difference);
+
+       // alert($('#theKey').val());
+        //document.onkeydown = kd;
+
+        //function kd() {
+        //  //  alert("Hello");
+        //    event.returnValue = false;
+
+        //}
+    </script>
+
+}
